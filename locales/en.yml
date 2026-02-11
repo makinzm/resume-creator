@@ -5,7 +5,9 @@ menu:
   edit_personal: Edit Personal Info
   add_experience: Add Experience
   load_resume: Load Resume
+  import_resume: Import Resume
   export_resume: Export Resume
+  save_as: Save As
   exit: Exit
   new: New Resume
   open: Open Resume
@@ -50,10 +52,27 @@ action:
 export:
   format_markdown: Markdown (.md)
   format_json: JSON (.json)
+  format_pdf: PDF (.pdf)
   select_format: Select export format
-  success: Exported successfully
-  error: Export failed
+  success: "Exported to"
+  error: "Export failed"
   press_enter: "Press Enter to export, 'q' to cancel"
+  path_title: "Export File Path"
+  path_prompt: "File path:"
+  path_help: "Press Enter to export, Esc to cancel"
+  error_empty_path: "Error: File path cannot be empty"
+import:
+  prompt: "Enter file path:"
+  help: "Press Enter to load, Esc to cancel"
+  success: "Loaded"
+  error: "Error"
+  error_empty_path: "Error: File path cannot be empty"
+saveas:
+  prompt: "Enter file path:"
+  help: "Press Enter to save, Esc to cancel"
+  success: "Saved to"
+  error: "Save failed"
+  error_empty_path: "Error: File path cannot be empty"
 message:
   save_key: "Press 's' to save"
   export_key: "Press 'e' to export"
@@ -65,3 +84,30 @@ help:
   nav: "↑/↓ or j/k: Navigate"
   edit_text: "Enter text, Tab for next field, Esc to cancel"
   footer: "'i': Insert | 'a': Add | 'd': Delete | 's': Save | 'e': Export | 'l': Language | 'q': Quit"
+mode:
+  normal: "NORMAL"
+  editing: "EDITING"
+editing:
+  help: "Tab/Enter: next field | Esc: cancel | Ctrl+C: quit"
+  field_prefix: "Editing"
+  personal:
+    name: "Full Name"
+    email: "Email"
+    phone: "Phone"
+    location: "Location"
+    website: "Website"
+  summary: "Professional Summary"
+  experience:
+    company: "Company"
+    position: "Position"
+    start_date: "Start Date"
+    end_date: "End Date"
+    description: "Description"
+  education:
+    institution: "Institution"
+    degree: "Degree"
+    field_of_study: "Field of Study"
+    graduation: "Graduation Date"
+    gpa: "GPA"
+  skills:
+    name: "Skill Name"

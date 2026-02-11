@@ -15,10 +15,17 @@ pub fn draw(f: &mut Frame, app: &App) {
         Screen::Education => draw_education(f, app, size),
         Screen::Skills => draw_skills(f, app, size),
         Screen::Export => draw_export(f, app, size),
+        Screen::ExportPath => draw_export_path(f, app, size),
+        Screen::Import => draw_import(f, app, size),
+        Screen::SaveAs => draw_save_as(f, app, size),
     }
 
     if app.show_quit_confirmation {
         draw_quit_confirmation(f, app, size);
+    }
+
+    if let Some(msg) = &app.status_message {
+        draw_status_message(f, app, size, msg);
     }
 }
 
@@ -62,7 +69,12 @@ fn draw_home(f: &mut Frame, app: &App, size: Rect) {
 }
 
 fn draw_personal_info(f: &mut Frame, app: &App, size: Rect) {
-    let title = app.t("section.personal");
+    let mode_str = if app.editing_field {
+        app.t("mode.editing")
+    } else {
+        app.t("mode.normal")
+    };
+    let title = format!("[{}] {}", mode_str, app.t("section.personal"));
 
     let mut content = String::new();
     content.push_str(&format!("{}: {}\n", app.t("field.name"), app.resume.personal_info.full_name));
@@ -78,10 +90,16 @@ fn draw_personal_info(f: &mut Frame, app: &App, size: Rect) {
         app.resume.personal_info.location.as_ref().unwrap_or(&"N/A".to_string())
     ));
 
+    let mut cursor_y = None;
+    let mut cursor_x = None;
+
     if app.editing_field {
         content.push_str("\n[");
-        content.push_str(&app.t("action.press_i_edit"));
+        content.push_str(&app.get_current_field_name());
         content.push_str("] ");
+        let field_name = app.get_current_field_name();
+        cursor_x = Some(4 + field_name.len() as u16 + 2 + app.edit_text.len() as u16);
+        cursor_y = Some(5);
         content.push_str(&app.edit_text);
     }
 
@@ -98,26 +116,51 @@ fn draw_personal_info(f: &mut Frame, app: &App, size: Rect) {
     let paragraph = Paragraph::new(content).block(block);
     f.render_widget(paragraph, chunks[0]);
 
-    let footer_text = format!(
-        "{} | {} | {}",
-        app.t("action.press_i_edit"),
-        app.t("action.press_tab_next"),
-        app.t("message.quit_key")
-    );
+    // Set cursor position if editing
+    if let (Some(x), Some(y)) = (cursor_x, cursor_y) {
+        f.set_cursor(chunks[0].x + x, chunks[0].y + y);
+    }
+
+    let footer_text = if app.editing_field {
+        format!(
+            "{}: {} | {}",
+            app.t("editing.field_prefix"),
+            app.get_current_field_name(),
+            app.t("editing.help")
+        )
+    } else {
+        format!(
+            "{} | {} | {}",
+            app.t("action.press_i_edit"),
+            app.t("action.press_tab_next"),
+            app.t("message.quit_key")
+        )
+    };
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
 }
 
 fn draw_summary(f: &mut Frame, app: &App, size: Rect) {
-    let title = app.t("section.summary");
+    let mode_str = if app.editing_field {
+        app.t("mode.editing")
+    } else {
+        app.t("mode.normal")
+    };
+    let title = format!("[{}] {}", mode_str, app.t("section.summary"));
 
     let summary = app.resume.professional_summary.as_ref().unwrap_or(&"".to_string()).clone();
     let mut content = summary.clone();
 
+    let mut cursor_y = None;
+    let mut cursor_x = None;
+
     if app.editing_field {
         content.push_str("\n[");
-        content.push_str(&app.t("action.press_i_edit"));
+        content.push_str(&app.t("editing.summary"));
         content.push_str("] ");
+        let field_name = app.t("editing.summary");
+        cursor_x = Some(4 + field_name.len() as u16 + 2 + app.edit_text.len() as u16);
+        cursor_y = Some(content.lines().count() as u16 - 1);
         content.push_str(&app.edit_text);
     }
 
@@ -134,17 +177,36 @@ fn draw_summary(f: &mut Frame, app: &App, size: Rect) {
     let paragraph = Paragraph::new(content).block(block);
     f.render_widget(paragraph, chunks[0]);
 
-    let footer_text = format!(
-        "{} | {}",
-        app.t("action.press_i_edit"),
-        app.t("action.press_tab_next")
-    );
+    // Set cursor position if editing
+    if let (Some(x), Some(y)) = (cursor_x, cursor_y) {
+        f.set_cursor(chunks[0].x + x, chunks[0].y + y);
+    }
+
+    let footer_text = if app.editing_field {
+        format!(
+            "{}: {} | {}",
+            app.t("editing.field_prefix"),
+            app.t("editing.summary"),
+            app.t("editing.help")
+        )
+    } else {
+        format!(
+            "{} | {}",
+            app.t("action.press_i_edit"),
+            app.t("action.press_tab_next")
+        )
+    };
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
 }
 
 fn draw_experience(f: &mut Frame, app: &App, size: Rect) {
-    let title = app.t("section.experience");
+    let mode_str = if app.editing_field {
+        app.t("mode.editing")
+    } else {
+        app.t("mode.normal")
+    };
+    let title = format!("[{}] {}", mode_str, app.t("section.experience"));
 
     let mut content = String::new();
     if app.resume.experience.is_empty() {
@@ -176,13 +238,27 @@ fn draw_experience(f: &mut Frame, app: &App, size: Rect) {
     let paragraph = Paragraph::new(content).block(block);
     f.render_widget(paragraph, chunks[0]);
 
-    let footer_text = app.t("action.edit_mode_help");
+    let footer_text = if app.editing_field {
+        format!(
+            "{}: {} | {}",
+            app.t("editing.field_prefix"),
+            app.get_current_field_name(),
+            app.t("editing.help")
+        )
+    } else {
+        app.t("action.edit_mode_help")
+    };
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
 }
 
 fn draw_education(f: &mut Frame, app: &App, size: Rect) {
-    let title = app.t("section.education");
+    let mode_str = if app.editing_field {
+        app.t("mode.editing")
+    } else {
+        app.t("mode.normal")
+    };
+    let title = format!("[{}] {}", mode_str, app.t("section.education"));
 
     let mut content = String::new();
     if app.resume.education.is_empty() {
@@ -214,13 +290,27 @@ fn draw_education(f: &mut Frame, app: &App, size: Rect) {
     let paragraph = Paragraph::new(content).block(block);
     f.render_widget(paragraph, chunks[0]);
 
-    let footer_text = app.t("action.edit_mode_help");
+    let footer_text = if app.editing_field {
+        format!(
+            "{}: {} | {}",
+            app.t("editing.field_prefix"),
+            app.get_current_field_name(),
+            app.t("editing.help")
+        )
+    } else {
+        app.t("action.edit_mode_help")
+    };
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
 }
 
 fn draw_skills(f: &mut Frame, app: &App, size: Rect) {
-    let title = app.t("section.skills");
+    let mode_str = if app.editing_field {
+        app.t("mode.editing")
+    } else {
+        app.t("mode.normal")
+    };
+    let title = format!("[{}] {}", mode_str, app.t("section.skills"));
 
     let mut content = String::new();
     if app.resume.skills.is_empty() {
@@ -250,7 +340,16 @@ fn draw_skills(f: &mut Frame, app: &App, size: Rect) {
     let paragraph = Paragraph::new(content).block(block);
     f.render_widget(paragraph, chunks[0]);
 
-    let footer_text = app.t("action.edit_mode_help");
+    let footer_text = if app.editing_field {
+        format!(
+            "{}: {} | {}",
+            app.t("editing.field_prefix"),
+            app.get_current_field_name(),
+            app.t("editing.help")
+        )
+    } else {
+        app.t("action.edit_mode_help")
+    };
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
 }
@@ -261,6 +360,7 @@ fn draw_export(f: &mut Frame, app: &App, size: Rect) {
     let formats = vec![
         app.t("export.format_markdown"),
         app.t("export.format_json"),
+        app.t("export.format_pdf"),
     ];
     let items: Vec<ListItem> = formats
         .iter()
@@ -289,6 +389,98 @@ fn draw_export(f: &mut Frame, app: &App, size: Rect) {
     let footer_text = app.t("export.press_enter");
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
     f.render_widget(footer, chunks[1]);
+}
+
+fn draw_import(f: &mut Frame, app: &App, size: Rect) {
+    let title = app.t("menu.import_resume");
+
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(1)
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(0),
+        ])
+        .split(size);
+
+    let block = Block::default().title(title).borders(Borders::ALL);
+    let label = app.t("import.prompt");
+    let content = format!("{}\n{}", label, app.import_path);
+    let paragraph = Paragraph::new(content).block(block);
+    f.render_widget(paragraph, chunks[0]);
+
+    let footer_text = app.t("import.help");
+    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
+    f.render_widget(footer, chunks[1]);
+}
+
+fn draw_save_as(f: &mut Frame, app: &App, size: Rect) {
+    let title = app.t("menu.save_as");
+
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(1)
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(0),
+        ])
+        .split(size);
+
+    let block = Block::default().title(title).borders(Borders::ALL);
+    let label = app.t("saveas.prompt");
+    let content = format!("{}\n{}", label, app.export_path);
+    let paragraph = Paragraph::new(content).block(block);
+    f.render_widget(paragraph, chunks[0]);
+
+    let footer_text = app.t("saveas.help");
+    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
+    f.render_widget(footer, chunks[1]);
+}
+
+fn draw_export_path(f: &mut Frame, app: &App, size: Rect) {
+    let title = app.t("export.path_title");
+
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(1)
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(0),
+        ])
+        .split(size);
+
+    let block = Block::default().title(title).borders(Borders::ALL);
+    let label = app.t("export.path_prompt");
+    let content = format!("{}\n{}", label, app.export_path);
+    let paragraph = Paragraph::new(content).block(block);
+    f.render_widget(paragraph, chunks[0]);
+
+    let footer_text = app.t("export.path_help");
+    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Gray));
+    f.render_widget(footer, chunks[1]);
+}
+
+fn draw_status_message(f: &mut Frame, app: &App, size: Rect, msg: &str) {
+    let popup_width = 60.min(size.width);
+    let popup_height = 5;
+    let x = (size.width.saturating_sub(popup_width)) / 2;
+    let y = (size.height.saturating_sub(popup_height)) / 2;
+
+    let popup = Rect {
+        x,
+        y,
+        width: popup_width,
+        height: popup_height,
+    };
+
+    let block = Block::default().borders(Borders::ALL);
+    let content = Paragraph::new(msg)
+        .block(block)
+        .alignment(Alignment::Center)
+        .wrap(ratatui::widgets::Wrap { trim: true });
+
+    f.render_widget(Clear, popup);
+    f.render_widget(content, popup);
 }
 
 fn draw_quit_confirmation(f: &mut Frame, app: &App, size: Rect) {

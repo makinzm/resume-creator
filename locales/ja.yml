@@ -5,7 +5,9 @@ menu:
   edit_personal: 個人情報を編集
   add_experience: 経歴を追加
   load_resume: レジュメをロード
+  import_resume: レジュメをインポート
   export_resume: レジュメをエクスポート
+  save_as: 名前を付けて保存
   exit: 終了
   new: 新規作成
   open: 開く
@@ -50,10 +52,27 @@ action:
 export:
   format_markdown: "Markdown (.md)"
   format_json: "JSON (.json)"
+  format_pdf: "PDF (.pdf)"
   select_format: エクスポート形式を選択
-  success: 正常にエクスポートされました
-  error: エクスポート失敗
+  success: "エクスポート完了"
+  error: "エクスポート失敗"
   press_enter: "Enterでエクスポート、'q'でキャンセル"
+  path_title: "エクスポート ファイルパス"
+  path_prompt: "ファイルパス："
+  path_help: "Enterでエクスポート、Escでキャンセル"
+  error_empty_path: "エラー: ファイルパスが空です"
+import:
+  prompt: "ファイルパスを入力："
+  help: "Enterでロード、Escでキャンセル"
+  success: "ロード完了"
+  error: "エラー"
+  error_empty_path: "エラー: ファイルパスが空です"
+saveas:
+  prompt: "ファイルパスを入力："
+  help: "Enterで保存、Escでキャンセル"
+  success: "保存完了"
+  error: "保存失敗"
+  error_empty_path: "エラー: ファイルパスが空です"
 message:
   save_key: "'s'を押して保存"
   export_key: "'e'を押してエクスポート"
@@ -65,3 +84,30 @@ help:
   nav: "↑/↓ or j/k: 移動"
   edit_text: "テキストを入力、Tabで次のフィールド、Escでキャンセル"
   footer: "'i': 挿入 | 'a': 追加 | 'd': 削除 | 's': 保存 | 'e': エクスポート | 'l': 言語 | 'q': 終了"
+mode:
+  normal: "通常"
+  editing: "編集中"
+editing:
+  help: "Tab/Enter: 次のフィールド | Esc: キャンセル | Ctrl+C: 終了"
+  field_prefix: "編集中"
+  personal:
+    name: "名前"
+    email: "メールアドレス"
+    phone: "電話番号"
+    location: "所在地"
+    website: "ウェブサイト"
+  summary: "プロフェッショナル概要"
+  experience:
+    company: "会社"
+    position: "職位"
+    start_date: "開始日"
+    end_date: "終了日"
+    description: "説明"
+  education:
+    institution: "教育機関"
+    degree: "学位"
+    field_of_study: "学位分野"
+    graduation: "卒業日"
+    gpa: "GPA"
+  skills:
+    name: "スキル名"

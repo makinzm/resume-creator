@@ -41,6 +41,10 @@ fn run_app<B: Backend>(mut terminal: Terminal<B>, mut app: App) -> Result<()> {
     loop {
         terminal.draw(|f| ui::draw(f, &app))?;
 
+        if app.should_quit {
+            break;
+        }
+
         if crossterm::event::poll(Duration::from_millis(250))? {
             if let Event::Key(KeyEvent {
                 code,
@@ -48,16 +52,22 @@ fn run_app<B: Backend>(mut terminal: Terminal<B>, mut app: App) -> Result<()> {
                 ..
             }) = event::read()?
             {
+                // Handle Ctrl+C first, works even in edit mode
+                if code == KeyCode::Char('c') && modifiers == KeyModifiers::CONTROL {
+                    app.should_quit = true;
+                    continue;
+                }
+
                 match (code, modifiers) {
                     (KeyCode::Char('q'), KeyModifiers::NONE) if !app.editing_field => {
                         if app.unsaved_changes {
                             app.show_quit_confirmation = true;
                         } else {
-                            break;
+                            app.should_quit = true;
                         }
                     }
                     (KeyCode::Char('y'), KeyModifiers::NONE) if app.show_quit_confirmation => {
-                        break;
+                        app.should_quit = true;
                     }
                     (KeyCode::Esc, KeyModifiers::NONE) if app.show_quit_confirmation => {
                         app.show_quit_confirmation = false;
@@ -65,8 +75,10 @@ fn run_app<B: Backend>(mut terminal: Terminal<B>, mut app: App) -> Result<()> {
                     (KeyCode::Esc, KeyModifiers::NONE) if app.editing_field => {
                         app.finish_editing();
                     }
-                    (KeyCode::Char('s'), KeyModifiers::NONE) if !app.editing_field => {
-                        app.save_resume()?;
+                    (KeyCode::Char('s'), KeyModifiers::NONE) if !app.editing_field && app.current_screen != app::Screen::SaveAs && app.current_screen != app::Screen::ExportPath => {
+                        let default_path = app::App::compute_default_export_path(&app.resume.personal_info.full_name);
+                        app.export_path = default_path;
+                        app.toggle_screen("save_as");
                     }
                     (KeyCode::Char('e'), KeyModifiers::NONE) if !app.editing_field => {
                         app.toggle_screen("export");
@@ -99,7 +111,7 @@ fn run_app<B: Backend>(mut terminal: Terminal<B>, mut app: App) -> Result<()> {
                     (KeyCode::BackTab, KeyModifiers::SHIFT) if !app.editing_field => {
                         app.move_to_prev_section();
                     }
-                    _ if app.editing_field => {
+                    _ if app.editing_field || app.current_screen == app::Screen::Import || app.current_screen == app::Screen::SaveAs || app.current_screen == app::Screen::ExportPath => {
                         app.handle_text_input(code);
                     }
                     _ => {}

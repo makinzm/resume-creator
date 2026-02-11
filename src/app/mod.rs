@@ -13,6 +13,9 @@ pub enum Screen {
     Education,
     Skills,
     Export,
+    ExportPath,
+    Import,
+    SaveAs,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -35,6 +38,9 @@ pub struct App {
     pub export_format: ExportFormat,
     pub status_message: Option<String>,
     pub i18n: I18n,
+    pub import_path: String,
+    pub export_path: String,
+    pub should_quit: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -50,10 +56,12 @@ pub enum Section {
 pub enum ExportFormat {
     Markdown,
     Json,
+    Pdf,
 }
 
 impl App {
     pub fn new() -> Result<Self> {
+        let default_export_path = Self::compute_default_export_path("");
         Ok(App {
             resume: Resume::new(),
             current_screen: Screen::Home,
@@ -68,7 +76,23 @@ impl App {
             export_format: ExportFormat::Markdown,
             status_message: None,
             i18n: I18n::new(Language::English),
+            import_path: String::new(),
+            export_path: default_export_path,
+            should_quit: false,
         })
+    }
+
+    pub fn compute_default_export_path(name: &str) -> String {
+        let home = dirs::home_dir().unwrap_or_default();
+        let name_part = if name.is_empty() {
+            "resume".to_string()
+        } else {
+            name.replace(" ", "_")
+        };
+        home.join(".config/resume-creator")
+            .join(format!("{}.json", name_part))
+            .to_string_lossy()
+            .to_string()
     }
 
     pub fn toggle_screen(&mut self, screen: &str) {
@@ -95,6 +119,9 @@ impl App {
                 Screen::Skills
             }
             "export" => Screen::Export,
+            "import" => Screen::Import,
+            "save_as" => Screen::SaveAs,
+            "export_path" => Screen::ExportPath,
             _ => self.current_screen,
         };
         self.selected_index = 0;
@@ -138,13 +165,24 @@ impl App {
                 } else if self.selected_index == 1 {
                     self.toggle_screen("experience");
                 } else if self.selected_index == 2 {
-                    self.status_message = Some("Load Resume not yet implemented in UI".to_string());
+                    self.toggle_screen("import");
                 } else if self.selected_index == 3 {
                     self.toggle_screen("export");
                 }
             }
+            Screen::Import => {
+                self.handle_import();
+                self.toggle_screen("home");
+            }
             Screen::Export => {
+                self.toggle_screen("export_path");
+            }
+            Screen::ExportPath => {
                 self.handle_export();
+                self.toggle_screen("home");
+            }
+            Screen::SaveAs => {
+                self.handle_save_as();
                 self.toggle_screen("home");
             }
             _ => {
@@ -420,6 +458,34 @@ impl App {
     }
 
     pub fn handle_text_input(&mut self, key: KeyCode) {
+        if self.current_screen == Screen::Import {
+            match key {
+                KeyCode::Char(c) => self.import_path.push(c),
+                KeyCode::Backspace => {
+                    self.import_path.pop();
+                }
+                KeyCode::Esc => {
+                    self.import_path.clear();
+                }
+                _ => {}
+            }
+            return;
+        }
+
+        if self.current_screen == Screen::SaveAs || self.current_screen == Screen::ExportPath {
+            match key {
+                KeyCode::Char(c) => self.export_path.push(c),
+                KeyCode::Backspace => {
+                    self.export_path.pop();
+                }
+                KeyCode::Esc => {
+                    self.export_path = Self::compute_default_export_path(&self.resume.personal_info.full_name);
+                }
+                _ => {}
+            }
+            return;
+        }
+
         if !self.editing_field {
             return;
         }
@@ -428,7 +494,7 @@ impl App {
             KeyCode::Backspace => {
                 self.edit_text.pop();
             }
-            KeyCode::Tab => {
+            KeyCode::Tab | KeyCode::Enter => {
                 self.toggle_edit_mode();
             }
             KeyCode::Esc => {
@@ -448,14 +514,60 @@ impl App {
     fn handle_export(&mut self) {
         use crate::export;
 
-        let format = if self.selected_index == 0 { "markdown" } else { "json" };
+        if self.export_path.is_empty() {
+            self.status_message = Some(self.t("export.error_empty_path"));
+            return;
+        }
 
-        match export::save_export_to_file(&self.resume, format) {
+        let format = match self.selected_index {
+            0 => "markdown",
+            1 => "json",
+            2 => "pdf",
+            _ => "markdown",
+        };
+
+        match export::save_export_to_file_with_path(&self.resume, format, &self.export_path) {
             Ok(path) => {
-                self.status_message = Some(format!("Exported to: {}", path));
+                self.status_message = Some(format!("{}: {}", self.t("export.success"), path));
             }
             Err(e) => {
-                self.status_message = Some(format!("Export failed: {}", e));
+                self.status_message = Some(format!("{}: {}", self.t("export.error"), e));
+            }
+        }
+    }
+
+    fn handle_save_as(&mut self) {
+        if self.export_path.is_empty() {
+            self.status_message = Some(self.t("saveas.error_empty_path"));
+            return;
+        }
+
+        match storage::save_resume_to_path(&self.resume, &self.export_path) {
+            Ok(()) => {
+                self.status_message = Some(format!("{}: {}", self.t("saveas.success"), self.export_path));
+                self.unsaved_changes = false;
+            }
+            Err(e) => {
+                self.status_message = Some(format!("{}: {}", self.t("saveas.error"), e));
+            }
+        }
+    }
+
+    fn handle_import(&mut self) {
+        if self.import_path.is_empty() {
+            self.status_message = Some(self.t("import.error_empty_path"));
+            return;
+        }
+
+        match storage::load_resume_from_path(&self.import_path) {
+            Ok(resume) => {
+                self.resume = resume;
+                self.unsaved_changes = false;
+                self.status_message = Some(format!("{}: {}", self.t("import.success"), self.import_path));
+                self.import_path.clear();
+            }
+            Err(e) => {
+                self.status_message = Some(format!("{}: {}", self.t("import.error"), e));
             }
         }
     }
@@ -489,5 +601,42 @@ impl App {
             self.t("menu.export_resume"),
             self.t("menu.exit"),
         ]
+    }
+
+    pub fn get_current_field_name(&self) -> String {
+        match self.current_section {
+            Section::Personal => {
+                match self.field_index {
+                    0 => self.t("editing.personal.name"),
+                    1 => self.t("editing.personal.email"),
+                    2 => self.t("editing.personal.phone"),
+                    3 => self.t("editing.personal.location"),
+                    4 => self.t("editing.personal.website"),
+                    _ => String::new(),
+                }
+            }
+            Section::Summary => self.t("editing.summary"),
+            Section::Experience => {
+                match self.field_index {
+                    0 => self.t("editing.experience.company"),
+                    1 => self.t("editing.experience.position"),
+                    2 => self.t("editing.experience.start_date"),
+                    3 => self.t("editing.experience.end_date"),
+                    4 => self.t("editing.experience.description"),
+                    _ => String::new(),
+                }
+            }
+            Section::Education => {
+                match self.field_index {
+                    0 => self.t("editing.education.institution"),
+                    1 => self.t("editing.education.degree"),
+                    2 => self.t("editing.education.field_of_study"),
+                    3 => self.t("editing.education.graduation"),
+                    4 => self.t("editing.education.gpa"),
+                    _ => String::new(),
+                }
+            }
+            Section::Skills => self.t("editing.skills.name"),
+        }
     }
 }

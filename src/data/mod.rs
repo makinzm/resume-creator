@@ -177,3 +177,80 @@ impl Default for Resume {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_resume_new_has_empty_fields() {
+        let resume = Resume::new();
+        assert_eq!(resume.personal_info.full_name, "");
+        assert_eq!(resume.personal_info.email, "");
+        assert!(resume.personal_info.phone.is_none());
+        assert!(resume.personal_info.location.is_none());
+        assert!(resume.professional_summary.is_none());
+        assert!(resume.experience.is_empty());
+        assert!(resume.education.is_empty());
+        assert!(resume.skills.is_empty());
+    }
+
+    #[test]
+    fn test_yearmonth_display() {
+        let ym = YearMonth::new(2024, 1);
+        assert_eq!(ym.to_string_display(), "Jan 2024");
+
+        let ym = YearMonth::new(2023, 12);
+        assert_eq!(ym.to_string_display(), "Dec 2023");
+
+        let ym = YearMonth::new(2024, 6);
+        assert_eq!(ym.to_string_display(), "Jun 2024");
+    }
+
+    #[test]
+    fn test_yearmonth_invalid_month() {
+        let ym = YearMonth::new(2024, 13);
+        assert_eq!(ym.to_string_display(), "--- 2024");
+    }
+
+    #[test]
+    fn test_proficiency_level_display() {
+        assert_eq!(ProficiencyLevel::Beginner.to_string(), "Beginner");
+        assert_eq!(ProficiencyLevel::Intermediate.to_string(), "Intermediate");
+        assert_eq!(ProficiencyLevel::Advanced.to_string(), "Advanced");
+        assert_eq!(ProficiencyLevel::Expert.to_string(), "Expert");
+    }
+
+    #[test]
+    fn test_skill_category_display() {
+        assert_eq!(SkillCategory::Technical.to_string(), "Technical");
+        assert_eq!(SkillCategory::Language.to_string(), "Language");
+        assert_eq!(SkillCategory::SoftSkill.to_string(), "Soft Skill");
+        assert_eq!(SkillCategory::Tool.to_string(), "Tool");
+    }
+
+    #[test]
+    fn test_language_display() {
+        assert_eq!(Language::English.to_string(), "English");
+        assert_eq!(Language::Japanese.to_string(), "日本語");
+    }
+
+    #[test]
+    fn test_resume_update_timestamp() {
+        let mut resume = Resume::new();
+        let original_updated_at = resume.metadata.updated_at.clone();
+
+        // Small delay to ensure timestamps differ
+        std::thread::sleep(std::time::Duration::from_millis(10));
+
+        resume.update_timestamp();
+        assert_ne!(resume.metadata.updated_at, original_updated_at);
+    }
+
+    #[test]
+    fn test_resume_has_unique_id() {
+        let resume1 = Resume::new();
+        let resume2 = Resume::new();
+        assert_ne!(resume1.id, resume2.id);
+    }
+}

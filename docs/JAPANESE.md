@@ -1,324 +1,445 @@
-# Japanese Language Guide / 日本語ガイド
+# レジュメ・クリエーター 日本語ガイド
 
-Complete guide for using Resume Creator in Japanese.
+レジュメ・クリエーターを日本語で使用するための完全なガイドです。
 
-## Overview / 概要
+## 概要
 
-Resume Creator supports full Japanese language interface. You can switch between English and Japanese at any time without losing your resume data.
+レジュメ・クリエーターは完全な日本語インターフェース対応です。いつでも英語と日本語を切り替えることができ、レジュメデータは失われません。
 
-## Switching to Japanese / 日本語への切り替え
+## 日本語モードへの切り替え
 
-### Quick Start
-1. Launch Resume Creator
-2. Press the `l` key (lowercase L)
-3. The entire interface switches to Japanese (日本語)
-4. Press `l` again to switch back to English
+### クイックスタート
 
-The language setting applies only to the UI - your resume content (names, descriptions, dates) remains exactly as you entered it.
+1. レジュメ・クリエーターを起動します
+2. `l` キー（小文字のL）を押します
+3. インターフェース全体が日本語に切り替わります
+4. もう一度 `l` キーを押すと英語に戻ります
 
-## Terminal Requirements / ターミナル要件
+言語設定はUIのみに適用されます。レジュメの内容（名前、説明、日付など）はそのまま保持されます。
 
-To properly display Japanese characters, your terminal must meet these requirements:
+## ターミナル要件
 
-### UTF-8 Encoding / UTF-8エンコーディング
-- Your terminal must use **UTF-8 character encoding**
-- This is the default on most modern terminals
-- To verify: Check terminal settings or preferences
+日本語の文字を正しく表示するために、ターミナルは以下の要件を満たす必要があります。
 
-### Japanese Font Support / 日本語フォント対応
-Your terminal needs a font that includes Japanese characters (kanji, hiragana, katakana).
+### UTF-8 エンコーディング
 
-#### Recommended Fonts / 推奨フォント
+- ターミナルは **UTF-8 文字エンコーディング** を使用する必要があります
+- ほとんどの最新ターミナルではデフォルトです
+- ターミナル設定で確認できます
+
+### 日本語フォント対応
+
+ターミナルは日本語文字（漢字、ひらがな、カタカナ）を含むフォントが必要です。
+
+#### 推奨フォント
 
 **Linux:**
-- `Noto Sans CJK JP` (recommended)
-- `DejaVu Sans Mono` (with CJK support)
-- `Ubuntu Mono` (basic support)
-- `Liberation Mono` (basic support)
+- `Noto Sans CJK JP`（推奨）
+- `Noto Serif CJK JP`
+- `IPAGothic`
+- `IPAPGothic`
+- `DejaVu Sans Mono`
 
 **macOS:**
-- `Menlo` (has built-in Japanese support)
+- `Menlo`（日本語対応）
 - `Monaco`
 - `Courier New`
+- `SF Mono`
 
 **Windows:**
-- `Courier New` (with Japanese support enabled)
+- `Courier New`（日本語対応）
 - `Consolas`
-- `MS Gothic` (for terminal emulators)
+- `MS Gothic`
+- `Yu Gothic Mono`
 
-#### Installing Fonts / フォントのインストール
+#### フォントのインストール
 
-**Linux (Ubuntu/Debian):**
+**Linux（Ubuntu/Debian）:**
 ```bash
-sudo apt-get install fonts-noto-cjk-extra
+sudo apt-get install fonts-noto-cjk fonts-noto-cjk-extra
+# または
+sudo apt-get install fonts-ipafont fonts-ipafont-gothic
 ```
 
-**Linux (Fedora):**
+**Linux（Fedora）:**
 ```bash
 sudo dnf install google-noto-sans-cjk-fonts
+# または
+sudo dnf install ipa-gothic-fonts ipa-mincho-fonts
 ```
 
 **macOS:**
 ```bash
 brew install font-noto-sans-cjk
+# または
+brew tap homebrew/cask-fonts
+brew install font-noto-sans-cjk
 ```
 
 **Windows:**
-- Download from [Google Fonts](https://fonts.google.com/noto)
-- Install to `C:\Windows\Fonts\`
+- [Google Fonts](https://fonts.google.com/noto) からダウンロード
+- `C:\Windows\Fonts\` にインストール
+- または Windows 設定から「オプション機能」→「言語パック」で日本語を追加
 
-### Recommended Terminals / 推奨ターミナル
+### 推奨ターミナル
 
-| Terminal | Platform | UTF-8 | Japanese | Notes |
-|----------|----------|-------|----------|-------|
-| **GNOME Terminal** | Linux | ✓ | ✓ | Excellent support |
-| **Konsole** | Linux (KDE) | ✓ | ✓ | Good support |
-| **iTerm2** | macOS | ✓ | ✓ | Best macOS option |
-| **Alacritty** | Cross-platform | ✓ | ✓ | Modern, fast |
-| **Windows Terminal** | Windows | ✓ | ✓ | Requires font setup |
-| **Kitty** | Linux/macOS | ✓ | ✓ | Modern terminal |
-| **Hyper** | Cross-platform | ✓ | ✓ | Electron-based |
+| ターミナル | プラットフォーム | UTF-8 | 日本語対応 | 注釈 |
+|-----------|-----------------|-------|-----------|------|
+| **GNOME ターミナル** | Linux | ✓ | ✓ | 優秀なサポート |
+| **Konsole** | Linux (KDE) | ✓ | ✓ | 良好なサポート |
+| **iTerm2** | macOS | ✓ | ✓ | macOS最良のオプション |
+| **Alacritty** | クロスプラットフォーム | ✓ | ✓ | モダンで高速 |
+| **Windows Terminal** | Windows | ✓ | ✓ | フォント設定が必要 |
+| **Kitty** | Linux/macOS | ✓ | ✓ | モダンターミナル |
+| **Hyper** | クロスプラットフォーム | ✓ | ✓ | Electron ベース |
 
-### Configuration Examples / 設定例
+### 設定例
 
-#### GNOME Terminal / GNOMEターミナル
-1. Open Preferences (メニュー → 設定)
-2. Go to Profiles tab
-3. Set Font to a CJK-compatible font (e.g., Noto Sans CJK)
-4. Ensure text encoding is UTF-8
+#### GNOME ターミナル
 
-#### iTerm2 (macOS)
-1. Preferences → Profiles
-2. Go to Text tab
-3. Select Font with CJK support (Menlo recommended)
-4. Check encoding is UTF-8 (View → Encoding)
+1. メニューから「設定」を開く
+2. 「プロファイル」タブを選択
+3. フォントを CJK 対応フォント（例：Noto Sans CJK）に設定
+4. テキストエンコーディングが UTF-8 であることを確認
+
+#### iTerm2（macOS）
+
+1. 「Preferences」→「Profiles」
+2. 「Text」タブを選択
+3. CJK対応フォント（Menlo推奨）を選択
+4. エンコーディングが UTF-8 であることを確認（「View」→「Encoding」）
 
 #### Windows Terminal
-1. Settings → Defaults
-2. Appearance section
-3. Font: Set to a CJK-supporting font
-4. Color scheme: Choose one you prefer
 
-## Japanese UI Elements / 日本語UI要素
+1. 「設定」→「デフォルト」を開く
+2. 「外観」セクションを選択
+3. フォント：CJK対応フォントを設定
+4. 色のテーマ：好みのものを選択
 
-When you switch to Japanese, these elements change:
+## 日本語ユーザーインターフェース
 
-### Main Menu / メインメニュー
+日本語に切り替えると、以下の要素が日本語で表示されます。
+
+### メインメニュー
+
 ```
-個人情報を編集 - Edit Personal Info
-経歴を追加 - Add Experience
-レジュメをエクスポート - Export Resume
-終了 - Exit
-```
-
-### Resume Sections / レジュメセクション
-```
-個人情報 - Personal Information
-プロフェッショナル概要 - Professional Summary
-職務経歴 - Work Experience
-教育 - Education
-スキル - Skills
+個人情報を編集
+経歴を追加
+レジュメをロード
+レジュメをエクスポート
+終了
 ```
 
-### Field Names / フィールド名
+### レジュメセクション
+
+```
+個人情報
+プロフェッショナル概要
+職務経歴
+教育
+スキル
+```
+
+### フィールド名
+
 ```
 名前 - Full Name
-メール - Email
-電話 - Phone
+メールアドレス - Email
+電話番号 - Phone
 所在地 - Location
 会社 - Company
 職位 - Position
+開始日 - Start Date
+終了日 - End Date
+説明 - Description
 学位 - Degree
-機関 - Institution
+分野 - Field of Study
+教育機関 - Institution
+卒業日 - Graduation Date
+GPA - GPA
 スキル名 - Skill Name
-習得度 - Proficiency Level
+カテゴリ - Category
+スキルレベル - Proficiency Level
 ```
 
-### Status Messages / ステータスメッセージ
+### ステータスメッセージ
+
 ```
-保存されていない変更があります - Unsaved changes
-レジュメが正常に保存されました - Resume saved successfully
+保存されていない変更があります
+レジュメが正常に保存されました
+エクスポートに成功しました
+エクスポートに失敗しました
 ```
 
-## Using Japanese Text Input / 日本語テキスト入力
+## 日本語テキスト入力
 
-### IME (Input Method Editor) / IME（入力メソッドエディタ）
+### IME（入力メソッドエディタ）について
 
-To input Japanese text while editing resume fields:
+レジュメフィールドに日本語テキストを入力するには、システムのIMEを使用します。
 
-1. **Activate your system's IME**
-   - Linux: Fcitx, IBus, or Uim (depending on distro)
-   - macOS: Built-in Japanese input
-   - Windows: Built-in IME or Google IME
-
-2. **In Resume Creator**
-   - Press `i` to enter edit mode
-   - Your IME should activate automatically
-   - Type in Japanese (hiragana/katakana)
-
-3. **Converting Input**
-   - Most IMEs support kanji conversion
-   - Use Space or specific IME shortcut to convert
-   - Press Enter to confirm and save field
-
-### Example: Entering a Japanese Name / 日本語名を入力する例
-
-1. Navigate to Personal Information (個人情報)
-2. Press `i` to edit Full Name (名前)
-3. Type in hiragana: `たなか たろう`
-4. Press Space (or IME shortcut) to convert to kanji: `田中 太郎`
-5. Press Enter to save
-
-### Terminal IME Support / ターミナルIMEサポート
+#### IMEの有効化
 
 **Linux:**
-- Fcitx (recommended for most terminals)
-- IBus (GNOME, KDE)
-- Uim (traditional option)
+- Fcitx、IBus、または Uim（ディストリビューションによって異なる）
+- `$ fcitx` または `$ ibus` でスタート
+- 設定ファイルで日本語入力メソッドを有効化
 
 **macOS:**
-- Use System Preferences → Keyboard → Input Sources
-- Select Japanese input method
-- Switch with Cmd+Space (or configured key)
+- システム環境設定 → キーボード → 入力ソース
+- 日本語入力メソッドを追加
+- `Cmd + Space` で切り替え可能
 
 **Windows:**
-- Windows IME (default)
-- Google IME (recommended)
-- BAIDU Input Method (alternative)
+- Windows IME（デフォルト）
+- Google IME（推奨）
+- または BAIDU 入力メソッド
 
-## Resume Content in Japanese / レジュメコンテンツの日本語入力
+#### レジュメ・クリエーターでの入力方法
 
-You can enter resume data entirely in Japanese:
+1. 編集モードに入る（`i` キーを押す）
+2. システムのIMEが自動的に有効になります
+3. ひらがなで入力します
+4. スペースキーまたはIMEのショートカットで漢字に変換
+5. Enter キーでフィールドを保存
 
-### Example / 例
+### 例：日本語の名前を入力する場合
 
-**Personal Info (個人情報):**
-- 名前: 田中太郎
-- メール: tanaka@example.com
-- 電話: 090-1234-5678
-- 所在地: 東京都渋谷区
+1. 「個人情報」セクションに移動
+2. `i` キーを押して「名前」を編集
+3. ひらがなで入力：`たなか たろう`
+4. スペースキーを押すと漢字に変換：`田中 太郎`
+5. Enter キーを押して保存
 
-**Professional Summary (プロフェッショナル概要):**
+### ターミナル IME サポート
+
+**Linux:**
+- Fcitx（ほとんどのターミナルで推奨）
+- IBus（GNOME、KDE）
+- Uim（従来のオプション）
+- 設定例：`fcitx-mozc` で Google IME 互換の日本語入力を利用可能
+
+**macOS:**
+- システム環境設定 → キーボード → 入力ソース
+- 日本語入力メソッドを選択
+- `Cmd + Space` で切り替え（またはカスタマイズ可能）
+
+**Windows:**
+- Windows IME（標準）
+- Google IME（推奨 - より良い漢字変換）
+- BAIDU 入力メソッド（代替オプション）
+
+## 日本語でのレジュメ作成
+
+レジュメデータを完全に日本語で入力できます。
+
+### 例
+
+**個人情報:**
+- 名前：田中太郎
+- メールアドレス：tanaka@example.com
+- 電話番号：090-1234-5678
+- 所在地：東京都渋谷区
+
+**プロフェッショナル概要:**
 ```
-ソフトウェアエンジニアとして10年の経験があります。
-クラウドアーキテクチャとデータサイエンスを専門としています。
+ソフトウェアエンジニアとして12年の経験があります。
+クラウドアーキテクチャとデータサイエンスを専門としており、
+複数のスタートアップと大企業でプロジェクトを主導してきました。
 ```
 
-**Work Experience (職務経歴):**
-- 会社: 株式会社テクノロジー
-- 職位: シニアエンジニア
-- 説明: Pythonを使用したML/AIプロジェクトを主導しました
+**職務経歴:**
+- 会社：株式会社テクノロジーイノベーション
+- 職位：シニアソフトウェアエンジニア
+- 説明：Python と Go を使用した ML/AI プロジェクトを主導し、年間 5 本のプロダクション配信を成功させました。
 
-## Exporting in Japanese / 日本語での書き出し
+**教育:**
+- 学位：情報工学 修士
+- 教育機関：東京大学大学院 情報理工学系研究科
+- 卒業日：2015年3月
 
-When you export a resume edited in Japanese:
+**スキル:**
+- カテゴリ：技術スキル
+  - Python (上級)
+  - JavaScript (上級)
+  - Rust (中級)
+  - Google Cloud Platform (上級)
 
-### Markdown Export
-- All Japanese text is preserved
-- Markdown formatting remains clean
-- File name includes timestamp but not Japanese characters
-- Example: `resume_Taro_Tanaka_20240211_143022.md`
+## レジュメのエクスポート
 
-### JSON Export
-- Complete Japanese text is preserved
-- UTF-8 encoding ensures proper character storage
-- Can be imported into other applications
-- Example: `resume_Taro_Tanaka_20240211_143022.json`
+日本語で編集したレジュメをエクスポートする場合、すべての日本語テキストが保持されます。
 
-### Tips for Exporting / エクスポートのコツ
+### Markdown エクスポート
 
-1. **Save Before Export** - Always press `s` to save first
-2. **Check Encoding** - Ensure your text editor uses UTF-8 when viewing
-3. **Font Support** - When sharing, recipient's terminal must have Japanese font
+- すべての日本語テキストが保持されます
+- Markdown フォーマットは見やすく保たれます
+- ファイル名にはタイムスタンプが含まれます
+- 例：`resume_Taro_Tanaka_20240211_143022.md`
 
-## Troubleshooting / トラブルシューティング
+### JSON エクスポート
 
-### Problem: Japanese characters show as boxes / 日本語が四角形で表示される
+- 完全な日本語テキストが保持されます
+- UTF-8 エンコーディングでファイルが保存されます
+- 他のアプリケーションにインポート可能です
+- 例：`resume_Taro_Tanaka_20240211_143022.json`
 
-**Solution:**
-1. Install Japanese fonts (see "Installing Fonts" section above)
-2. Configure terminal to use the installed font
-3. Restart terminal and Resume Creator
+### PDF エクスポート
 
-### Problem: Cannot input Japanese text / 日本語が入力できない
+- 日本語フォントがシステムに存在する場合、日本語テキストが正しく表示されます
+- 日本語フォント（Noto CJK など）をインストールすることを推奨
 
-**Solution:**
-1. Verify your system IME is active
-2. Check terminal emulator supports input methods
-3. Try different terminal (Alacritty, iTerm2, GNOME Terminal)
-4. Check if IME works in other terminal applications first
+### エクスポートのコツ
 
-### Problem: Switching to Japanese shows incorrect characters / 日本語に切り替えるときに文字が間違っている
+1. **事前に保存する** - エクスポート前に必ず `s` キーで保存
+2. **エンコーディングを確認** - テキストエディタで開く時に UTF-8 を使用
+3. **フォント対応** - ファイルを共有する場合、相手のターミナルも日本語フォントが必要です
+4. **PDF に含まれる日本語フォント** - PDF エクスポートの場合、システムに日本語フォントがあることを確認
 
-**Solution:**
-1. Try pressing `l` multiple times to toggle languages
-2. Restart the application
-3. Ensure terminal encoding is UTF-8
+## トラブルシューティング
 
-### Problem: Export file shows garbled Japanese / エクスポート文字が文字化けしている
+### 問題：日本語が四角形や文字化けで表示される
 
-**Solution:**
-1. Verify exported file is viewed/opened with UTF-8 encoding
-2. In your text editor, set encoding to UTF-8 explicitly
-3. If sharing, inform recipient to use UTF-8 encoding
-4. Use JSON export instead (handles encoding better)
+**解決方法:**
+1. 日本語フォントをインストール（上記「フォントのインストール」セクション参照）
+2. ターミナル設定で日本語フォントを使用するように設定
+3. ターミナルとレジュメ・クリエーターを再起動
 
-## Keyboard Layouts / キーボードレイアウト
+**確認コマンド:**
+```bash
+# インストール済みフォントを確認
+fc-list :lang=ja
+# Noto CJK がインストールされているか確認
+fc-list | grep "Noto.*CJK"
+```
 
-Resume Creator uses only ASCII keys, so language/keyboard layout changes don't affect shortcuts:
+### 問題：日本語が入力できない
 
-- All shortcuts (`q`, `s`, `e`, `l`, `i`, `a`, `d`) work with standard key codes
-- Switch your keyboard layout as needed without affecting shortcut functionality
-- Input your resume in Japanese using your system IME, English using standard typing
+**解決方法:**
+1. システム IME が有効になっているか確認
+2. ターミナルエミュレーターが入力メソッドをサポートしているか確認
+3. 別のターミナル（Alacritty、iTerm2、GNOME ターミナル）を試す
+4. 他のターミナルアプリケーションで IME が動作するか確認
 
-### Pro Tip / プロのコツ
+**Linux での確認:**
+```bash
+# Fcitx がインストール済みか確認
+which fcitx
+# または IBus
+which ibus
+```
 
-On Linux/macOS, you can use Ctrl+Space or Cmd+Space to toggle IME while Resume Creator is running, allowing rapid switching between Japanese input and command entry.
+### 問題：日本語に切り替えたときに文字が正しく表示されない
 
-## Character Encoding / 文字エンコーディング
+**解決方法:**
+1. `l` キーを複数回押して言語を切り替え
+2. アプリケーションを再起動
+3. ターミナルのエンコーディングが UTF-8 であることを確認
 
-**Resume Creator uses UTF-8 throughout:**
-- Resume data stored as UTF-8 JSON
-- Exports maintain UTF-8 encoding
-- Recommended: Always open exported files as UTF-8
+**確認コマンド:**
+```bash
+# 現在のロケール設定を確認
+locale
+# UTF-8 対応ロケールを確認
+locale -a | grep ja_JP
+```
 
-If you encounter encoding issues:
-1. Verify terminal uses UTF-8 (usually under Settings/Encoding)
-2. Verify text editor opens files as UTF-8
-3. For files received from others, explicitly set UTF-8 encoding
+### 問題：エクスポートファイルの日本語が文字化けしている
 
-## System Locales / システムロケール
+**解決方法:**
+1. エクスポートファイルを UTF-8 エンコーディングで開く
+2. テキストエディタで明示的に UTF-8 を選択
+3. ファイルを共有する場合、相手に UTF-8 で開くよう指示
+4. JSON エクスポートを使用（エンコーディング処理が優れています）
 
-Japanese UI will work best if your system locale is set to Japanese, but it's not required:
+**テキストエディタの設定:**
+- VS Code：ファイル → 「エンコーディングで再度開く」→ UTF-8 を選択
+- Vim：`:set fileencoding=utf-8`
+- Nano：デフォルトで UTF-8
+
+### 問題：PDF エクスポートで日本語が表示されない
+
+**解決方法:**
+1. 日本語フォント（Noto Sans CJK JP など）をシステムにインストール
+2. PDF ビューアーが日本語フォントに対応していることを確認
+3. 必要に応じて、Linux では `fonts-noto-cjk` パッケージをインストール
+
+## キーボードレイアウト
+
+レジュメ・クリエーターはすべての操作に ASCII キーを使用するため、言語やキーボードレイアウトの変更はショートカットに影響しません。
+
+- すべてのショートカット（`q`、`s`、`e`、`l`、`i`、`a`、`d`）は標準キーコードで動作
+- 必要に応じてキーボードレイアウトを切り替えても、ショートカットは影響を受けない
+- IME を使用して日本語を入力し、通常のキー入力でコマンドを実行
+
+### プロのコツ
+
+Linux/macOS では、`Ctrl + Space` または `Cmd + Space` を使用して IME をトグルでき、レジュメ・クリエーター実行中に日本語入力とコマンド入力を迅速に切り替えられます。
+
+## 文字エンコーディング
+
+**レジュメ・クリエーターは全体的に UTF-8 を使用します：**
+- レジュメデータは UTF-8 JSON として保存
+- エクスポートは UTF-8 エンコーディングを保持
+- 推奨：エクスポートファイルを開くときは常に UTF-8 を指定
+
+エンコーディングに問題がある場合：
+1. ターミナルが UTF-8 を使用していることを確認（通常は設定で確認）
+2. テキストエディタがファイルを UTF-8 で開くことを確認
+3. 他のユーザーから受け取ったファイルの場合、明示的に UTF-8 エンコーディングを設定
+
+## システムロケール設定
+
+日本語 UI は、システムロケールが日本語に設定されている場合に最適に動作しますが、必須ではありません。
 
 **Linux:**
 ```bash
+# 利用可能なロケールを確認
 locale -a | grep ja_JP
-# Should show: ja_JP.UTF-8
+# 出力例：ja_JP.UTF-8
+
+# ロケールを一時的に変更
+export LC_ALL=ja_JP.UTF-8
+export LANG=ja_JP.UTF-8
 ```
 
 **macOS:**
 ```bash
+# 利用可能なロケールを確認
 locale -a | grep ja_JP
-# Should show: ja_JP.UTF-8
+# 出力例：ja_JP.UTF-8
 ```
 
 **Windows:**
-- Languages & Region → Language
-- Check if Japanese is in your available languages
+- 設定 → 「言語と地域」
+- 日本語が利用可能な言語に含まれているか確認
+- 必須ではありません
 
-Not strictly necessary - Resume Creator detects terminal capabilities automatically.
+レジュメ・クリエーターはターミナル機能を自動的に検出するため、厳密には必須ではありません。
 
-## Support for Other CJK Languages / 他のCJK言語のサポート
+## サポートされている言語
 
-Currently, Resume Creator officially supports:
-- English (英語)
-- Japanese (日本語)
+現在、レジュメ・クリエーターが公式にサポートしている言語：
+- 英語（English）
+- 日本語（日本語）
 
-Chinese (中文) and Korean (한국) are not currently supported but may be added in future versions.
+中国語（中文）と韓国語（한국어）は現在サポートされていませんが、将来のバージョンで追加される予定があります。
+
+## キーボードショートカット（日本語インターフェース）
+
+| キー | 機能 |
+|------|------|
+| `l` | 言語をトグル（英語/日本語） |
+| `i` | 編集モードに入る |
+| `Tab` | 次のフィールドへ移動 |
+| `Esc` | 編集を中止 |
+| `↑`/`↓` または `j`/`k` | 上下に移動 |
+| `a` | 新しい項目を追加 |
+| `d` | 項目を削除 |
+| `s` | レジュメを保存 |
+| `e` | レジュメをエクスポート |
+| `q` | アプリケーションを終了 |
 
 ---
 
-**Happy resume building in Japanese! 頑張ってください！**
+**レジュメ作成を頑張ってください！頑張ってください！**
 
-See [KEYBINDINGS.md](./KEYBINDINGS.md) and [README.md](../README.md) for more information.
+詳細は [KEYBINDINGS.md](./KEYBINDINGS.md) および [README.md](../README.md) を参照してください。
