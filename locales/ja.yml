@@ -1,0 +1,67 @@
+app:
+  title: レジュメ クリエーター
+menu:
+  home: ホーム
+  edit_personal: 個人情報を編集
+  add_experience: 経歴を追加
+  load_resume: レジュメをロード
+  export_resume: レジュメをエクスポート
+  exit: 終了
+  new: 新規作成
+  open: 開く
+  save: 保存
+  edit: 編集
+  delete: 削除
+  add: 追加
+section:
+  personal: 個人情報
+  summary: プロフェッショナル概要
+  experience: 職務経歴
+  education: 教育
+  skills: スキル
+field:
+  name: 名前
+  email: メールアドレス
+  phone: 電話番号
+  location: 所在地
+  website: ウェブサイト
+  company: 会社
+  position: 職位
+  start_date: 開始日
+  end_date: 終了日
+  current: 現在の職務
+  description: 説明
+  institution: 教育機関
+  degree: 学位
+  field_of_study: 学位分野
+  graduation: 卒業日
+  gpa: GPA
+  skill_name: スキル名
+  category: カテゴリ
+  proficiency: スキルレベル
+action:
+  press_i_edit: "'i'を押して編集"
+  press_a_add: "'a'を押して追加"
+  press_d_delete: "'d'を押して削除"
+  press_tab_next: "'Tab'で次のセクション"
+  edit_mode_help: "'i': 編集 | 'a': 追加 | 'd': 削除 | 'Tab': 次へ"
+  unsaved_changes: 保存されていない変更があります
+  save_prompt: "保存しますか？ (y/n)"
+export:
+  format_markdown: "Markdown (.md)"
+  format_json: "JSON (.json)"
+  select_format: エクスポート形式を選択
+  success: 正常にエクスポートされました
+  error: エクスポート失敗
+  press_enter: "Enterでエクスポート、'q'でキャンセル"
+message:
+  save_key: "'s'を押して保存"
+  export_key: "'e'を押してエクスポート"
+  language_key: "'l'で言語を切り替え"
+  quit_key: "'q'で終了"
+  language: "言語："
+  unsaved: "未保存："
+help:
+  nav: "↑/↓ or j/k: 移動"
+  edit_text: "テキストを入力、Tabで次のフィールド、Escでキャンセル"
+  footer: "'i': 挿入 | 'a': 追加 | 'd': 削除 | 's': 保存 | 'e': エクスポート | 'l': 言語 | 'q': 終了"

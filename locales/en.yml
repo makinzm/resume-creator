@@ -1,0 +1,67 @@
+app:
+  title: Resume Creator
+menu:
+  home: Home
+  edit_personal: Edit Personal Info
+  add_experience: Add Experience
+  load_resume: Load Resume
+  export_resume: Export Resume
+  exit: Exit
+  new: New Resume
+  open: Open Resume
+  save: Save
+  edit: Edit
+  delete: Delete
+  add: Add
+section:
+  personal: Personal Information
+  summary: Professional Summary
+  experience: Work Experience
+  education: Education
+  skills: Skills
+field:
+  name: Full Name
+  email: Email
+  phone: Phone
+  location: Location
+  website: Website
+  company: Company
+  position: Position
+  start_date: Start Date
+  end_date: End Date
+  current: Currently Working
+  description: Description
+  institution: Institution
+  degree: Degree
+  field_of_study: Field of Study
+  graduation: Graduation Date
+  gpa: GPA
+  skill_name: Skill Name
+  category: Category
+  proficiency: Proficiency
+action:
+  press_i_edit: Press 'i' to edit
+  press_a_add: Press 'a' to add
+  press_d_delete: Press 'd' to delete
+  press_tab_next: Press 'Tab' to next section
+  edit_mode_help: "'i': Edit | 'a': Add | 'd': Delete | 'Tab': Next"
+  unsaved_changes: You have unsaved changes
+  save_prompt: Save? (y/n)
+export:
+  format_markdown: Markdown (.md)
+  format_json: JSON (.json)
+  select_format: Select export format
+  success: Exported successfully
+  error: Export failed
+  press_enter: "Press Enter to export, 'q' to cancel"
+message:
+  save_key: "Press 's' to save"
+  export_key: "Press 'e' to export"
+  language_key: "Press 'l' to toggle language"
+  quit_key: "Press 'q' to quit"
+  language: "Language:"
+  unsaved: "Unsaved:"
+help:
+  nav: "↑/↓ or j/k: Navigate"
+  edit_text: "Enter text, Tab for next field, Esc to cancel"
+  footer: "'i': Insert | 'a': Add | 'd': Delete | 's': Save | 'e': Export | 'l': Language | 'q': Quit"
