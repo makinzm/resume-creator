@@ -2,6 +2,16 @@
 
 A modern, terminal-based resume builder written in Rust. Create, edit, and export professional resumes directly from your terminal with support for English and Japanese languages.
 
+## Demo
+
+**Scenario 1 — Create a resume, save as JSON, export to PDF:**
+
+![Scenario 1: Create and Export](demo/scenario1.gif)
+
+**Scenario 2 — Import JSON, edit, re-export to PDF and JSON:**
+
+![Scenario 2: Import, Edit and Export](demo/scenario2.gif)
+
 ## Features
 
 - **TUI Interface**: Navigate and edit your resume entirely in the terminal
